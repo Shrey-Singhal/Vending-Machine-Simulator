@@ -10,6 +10,10 @@ public:
     ~LinkedList();
 
     // more functions to be added perhaps...
+    void addBack(std::vector<std::string> stock_data);
+    int size();
+    Stock& get(int i); 
+    void sortByName();
 
 private:
     // the beginning of the list

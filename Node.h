@@ -2,7 +2,8 @@
 #define NODE_H
 #include <string> 
 #include "Coin.h"
-
+#include <vector>
+#include <iostream>
 
 //The length of the id string not counting the nul terminator
 #define IDLEN 5
@@ -54,7 +55,8 @@ public:
     Price price;
     
     // how many of this item do we have on hand? 
-    unsigned on_hand;    
+    unsigned on_hand;
+    Stock(std::vector<std::string> data_vector);    
 };
 
 /**
