@@ -14,7 +14,9 @@ using namespace std;
 
 void displayMainMenu();
 vector<string> tokenize(string s, char delimeter);
-void displayStock(LinkedList LL);
+void displayStock(LinkedList* LL);
+void addItem(LinkedList* LL);
+
 int main(int argc, char **argv)
 {
     /* validate command line arguments */
@@ -25,16 +27,16 @@ int main(int argc, char **argv)
 
     string line;
     vector<string> content;
-    LinkedList LL;
+    LinkedList* LL = new LinkedList;
     // convert the content in the .dat file to a vector and add that vector to the linked list.
     while (getline(infile, line)) {
         content = tokenize(line, '|');
-        LL.addBack(content);
+        LL->addBack(content);
     }
 
     // Close the file
     infile.close();
-    LL.sortByName();
+    LL->sortByName();
 
     string user_choice;
     bool valid_loop = true;
@@ -47,6 +49,10 @@ int main(int argc, char **argv)
         }
         else if (user_choice == "8") {
             valid_loop = false;
+        }
+        else if (user_choice == "4") {
+            cout << endl;
+            addItem(LL);
         }
     }
 
@@ -73,11 +79,6 @@ vector<string> tokenize(string s, char delimeter) {
     // stringstream ss(s);
     string token;
 
-    // while (getline(ss, token, delimeter)) {
-    //     tokens.push_back(token);
-        
-    // }
-    // return tokens;
     string::size_type i;
     for (i = 0; i < s.length(); i++) {
         if (s[i] != delimeter) {
@@ -94,17 +95,50 @@ vector<string> tokenize(string s, char delimeter) {
 
 
 
-void displayStock(LinkedList LL) {
+void displayStock(LinkedList* LL) {
     cout << endl;
     cout << "Items Menu" << endl;
     cout << "----------" << endl;
     cout << "ID   |Name                                   | Available | Price" << endl;
     cout << "-------------------------------------------------------------------" << endl;
 
-    for (int i = 0; i < LL.size(); ++i) {
-        cout << LL.get(i).id << "|" << LL.get(i).name << "                 |" << 
-        LL.get(i).on_hand << "         |" << "$ " << LL.get(i).price.dollars << "." << LL.get(i).price.cents << endl;
+    for (int i = 0; i < LL->size(); ++i) {
+        cout << LL->get(i).id << "|" << LL->get(i).name << "                 |" << 
+        LL->get(i).on_hand << "         |" << "$ " << LL->get(i).price.dollars << "." << LL->get(i).price.cents << endl;
     }
 
     cout << endl;
+}
+
+void addItem(LinkedList* LL) {
+    string newItemId = "I";
+    int noOfzeroes = 4 -  to_string(LL->size() + 1).length();
+    for (int i = 0; i < noOfzeroes; ++i) {
+        newItemId += "0";
+    }
+    newItemId += to_string(LL->size() + 1);
+    cout << "The id of the new stock will be: " << newItemId << endl;
+    cout << "Enter the item name: ";
+    string itemName;
+    getline(cin >> ws, itemName);
+
+    cout << "Enter the item description: ";
+    string itemDescription;
+    getline(cin >> ws, itemDescription);
+
+    cout << "Enter the price for the item: ";
+    string itemPrice;
+    getline(cin >> ws, itemPrice);
+
+    cout << "This item \"" << itemName << " - " << itemDescription << "\" has now been added to the menu." << endl;
+    cout << endl;
+    vector<string> content;
+    content.push_back(newItemId);
+    content.push_back(itemName);
+    content.push_back(itemDescription);
+    content.push_back(itemPrice);
+    content.push_back(to_string(DEFAULT_STOCK_LEVEL));
+    LL->addBack(content);
+    LL->sortByName();
+
 }
