@@ -16,6 +16,7 @@ void displayMainMenu();
 vector<string> tokenize(string s, char delimeter);
 void displayStock(LinkedList* LL);
 void addItem(LinkedList* LL);
+void removeItem(LinkedList* LL);
 
 int main(int argc, char **argv)
 {
@@ -47,12 +48,16 @@ int main(int argc, char **argv)
         if (user_choice == "1") {
             displayStock(LL);
         }
-        else if (user_choice == "8") {
+        else if (user_choice == "9") {
             valid_loop = false;
         }
         else if (user_choice == "4") {
             cout << endl;
             addItem(LL);
+        }
+        else if (user_choice == "5") {
+            cout << endl;
+            removeItem(LL);
         }
     }
 
@@ -68,9 +73,10 @@ void displayMainMenu() {
     cout << "Administrator-Only Menu:" << endl;
     cout << "  4.Add Item" << endl;
     cout << "  5.Remove Item" << endl;
-    cout << "  6.Reset Stock" << endl;
-    cout << "  7.Reset Coins" << endl;
-    cout << "  8.Abort Program" << endl;
+    cout << "  6.Display Coins" << endl;
+    cout << "  7.Reset Stock" << endl;
+    cout << "  8.Reset Coins" << endl;
+    cout << "  9.Abort Program" << endl;
     cout << "Select your option(1-9): ";
 }
 
@@ -102,9 +108,12 @@ void displayStock(LinkedList* LL) {
     cout << "ID   |Name                                   | Available | Price" << endl;
     cout << "-------------------------------------------------------------------" << endl;
 
+    cout << endl;
     for (int i = 0; i < LL->size(); ++i) {
-        cout << LL->get(i).id << "|" << LL->get(i).name << "                 |" << 
-        LL->get(i).on_hand << "         |" << "$ " << LL->get(i).price.dollars << "." << LL->get(i).price.cents << endl;
+        cout << left << setw(5) << LL->get(i).id << "|";
+        cout << left << setw(39) << LL->get(i).name << "|";
+        cout << left << setw(10) << LL->get(i).on_hand << " |";
+        cout << fixed << setprecision(2) << "$ " << LL->get(i).price.dollars << "." << LL->get(i).price.cents << endl;
     }
 
     cout << endl;
@@ -141,4 +150,29 @@ void addItem(LinkedList* LL) {
     LL->addBack(content);
     LL->sortByName();
 
+}
+
+void removeItem(LinkedList* LL) {
+    cout << "Enter the item id of the item to remove from the menu: ";
+    string itemId;
+    getline(cin >> ws, itemId);
+
+    bool itemFound = false;
+    int i = 0;
+    while (i < LL->size()) {
+        if (LL->get(i).id == itemId) {
+            cout << "\"" << LL->get(i).id << " - " << LL->get(i).name << " - " << LL->get(i).description << "\" has been removed from the system.";
+            LL->remove(i);
+            itemFound = true;
+        } else {
+            ++i;
+        }
+    }
+
+    if (!itemFound) {
+        cout << "Error: desired id was not found." << endl;
+        cout << "The task Remove Item failed to run successfully.";
+    }
+
+    cout << endl;
 }

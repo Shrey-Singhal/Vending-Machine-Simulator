@@ -65,3 +65,26 @@ void LinkedList::sortByName() {
         }
     }
 }
+
+void LinkedList::remove(int index) {
+    if (index < 0 || index >= size()) {
+        return;
+    }
+
+    Node* current = head;
+    Node* prev = nullptr;
+    for (int i = 0; i < index; ++i) {
+        prev = current;
+        current = current->next;
+    }
+
+    if (prev == nullptr) {
+        // remove head node
+        head = current->next;
+    } else {
+        prev->next = current->next;
+    }
+
+    delete current;
+    this->count -= 1;
+}

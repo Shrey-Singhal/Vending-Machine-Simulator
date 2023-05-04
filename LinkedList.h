@@ -14,6 +14,7 @@ public:
     int size();
     Stock& get(int i); 
     void sortByName();
+    void remove(int index);
 
 private:
     // the beginning of the list
