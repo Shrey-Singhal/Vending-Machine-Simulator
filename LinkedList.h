@@ -19,6 +19,9 @@ public:
 private:
     // the beginning of the list
     Node* head;
+
+    // pointer to the last node in list
+    Node* tail;
   
     // how many nodes are there in the list?
     unsigned count;

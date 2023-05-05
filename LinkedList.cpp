@@ -2,6 +2,7 @@
 
 LinkedList::LinkedList() {
    head = nullptr;
+   tail = nullptr;
    count = 0;
 
    // TODO
@@ -18,14 +19,11 @@ void LinkedList::addBack(std::vector<std::string> stock_data) {
     newNode->next = nullptr;
     if (head == nullptr) {
         head = newNode;
+        tail = newNode;
     }
     else {
-        Node* current = head;
-
-        while (current->next != nullptr) {
-            current = current->next;
-        }
-        current->next = newNode;
+        tail->next = newNode;
+        tail = newNode;
     }
     this->count += 1;
 }
