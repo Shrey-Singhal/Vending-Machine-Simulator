@@ -18,6 +18,7 @@ vector<string> tokenize(string s, char delimeter);
 void displayStock(LinkedList* LL);
 void addItem(LinkedList* LL);
 void removeItem(LinkedList* LL);
+void saveData(LinkedList* LL);
 
 int main(int argc, char **argv)
 {
@@ -65,6 +66,10 @@ int main(int argc, char **argv)
             LL->resetStock();
             cout << "All stock has been reset to the default level of X" << endl;
             cout << endl;
+        }
+        else if (user_choice == "3") {
+            saveData(LL);
+            valid_loop = false;
         }
     }
 
@@ -184,3 +189,23 @@ void removeItem(LinkedList* LL) {
     cout << endl;
 }
 
+void saveData(LinkedList* LL) { 
+    // Open the file in write mode to clear all the content
+    ofstream file("stock.dat", ios::out | ios::trunc);
+
+    file.close();
+
+    // Reopen the file in append mode to write new content
+    file.open("stock.dat", ios::out | ios::app);
+
+    // Write new content to the file
+    for (int i = 0; i < LL->size(); ++i) {
+        file << LL->get(i).id <<"|" << LL->get(i).name << "|" << LL->get(i).description << "|" << 
+        LL->get(i).price.dollars << "." << LL->get(i).price.cents << "|" << LL->get(i).on_hand;
+        if (i < LL->size() - 1) {
+            file << endl;
+        }
+    }
+
+    file.close();
+}
