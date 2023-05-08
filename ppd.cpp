@@ -60,6 +60,12 @@ int main(int argc, char **argv)
             cout << endl;
             removeItem(LL);
         }
+        else if (user_choice == "7") {
+            cout << endl;
+            LL->resetStock();
+            cout << "All stock has been reset to the default level of X" << endl;
+            cout << endl;
+        }
     }
 
  
@@ -177,3 +183,4 @@ void removeItem(LinkedList* LL) {
 
     cout << endl;
 }
+

@@ -15,6 +15,7 @@ public:
     Stock& get(int i); 
     void sortByName();
     void remove(int index);
+    void resetStock();
 
 private:
     // the beginning of the list

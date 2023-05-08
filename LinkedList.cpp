@@ -86,3 +86,15 @@ void LinkedList::remove(int index) {
     delete current;
     this->count -= 1;
 }
+
+void LinkedList::resetStock() {
+    Node* current = head;
+
+    while (current != nullptr) {
+        Stock* currentData = current->data;
+        currentData->on_hand = DEFAULT_STOCK_LEVEL;
+    
+        current = current->next;
+    }
+    
+}
