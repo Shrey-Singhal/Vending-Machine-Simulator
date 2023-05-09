@@ -65,26 +65,25 @@ void LinkedList::sortByName() {
 }
 
 void LinkedList::remove(int index) {
-    if (index < 0 || index >= size()) {
-        return;
-    }
-
     Node* current = head;
     Node* prev = nullptr;
-    for (int i = 0; i < index; ++i) {
+    int i = 0;
+    while (current != nullptr && i < index) {
         prev = current;
         current = current->next;
+        i++;
     }
 
-    if (prev == nullptr) {
-        // remove head node
-        head = current->next;
-    } else {
-        prev->next = current->next;
-    }
+    if (current != nullptr) {
+        if (prev == nullptr) {
+            head = current->next;
+        } else {
+            prev->next = current->next;
+        }
 
-    delete current;
-    this->count -= 1;
+        delete current;
+        this->count -= 1;
+    }
 }
 
 void LinkedList::resetStock() {
