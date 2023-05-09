@@ -67,7 +67,7 @@ void LinkedList::sortByName() {
 void LinkedList::remove(int index) {
     Node* current = head;
     Node* prev = nullptr;
-    int i = 0;
+    int i = 0; 
     while (current != nullptr && i < index) {
         prev = current;
         current = current->next;
