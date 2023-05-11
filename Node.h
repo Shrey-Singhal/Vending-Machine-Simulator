@@ -29,7 +29,7 @@
  * of inaccuracy due to rounding. In the case of currency this really is
  * not acceptable so we introduce our own type to keep track of currency.
  **/
-class Price
+struct Price
 {
 public:
     // The dollar value, and the cents value for some price
@@ -52,7 +52,7 @@ public:
 
     unsigned on_hand;
 
-    Stock(std::vector<std::string> data_vector);    
+    Stock(std::vector<std::string> dataVector);
 };
 
 /**

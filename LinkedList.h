@@ -10,11 +10,11 @@ public:
     ~LinkedList();
 
     // more functions to be added perhaps...
-    void addBack(std::vector<std::string> stock_data);
+    void addBack(const std::vector<std::string> &stockData);
     int size() const;
     Stock& get(int index);
     void sortByName();
-    void remove(int index);
+    bool remove(const std::string &id);
     void resetStock();
 
 private:
@@ -26,6 +26,9 @@ private:
   
     // how many nodes are there in the list?
     unsigned count;
+
+
+
 };
 
 #endif  // LINKEDLIST_H

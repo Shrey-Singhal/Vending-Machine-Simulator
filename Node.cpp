@@ -10,12 +10,12 @@ Node::~Node(){
     delete(next);
 }
 
-Stock::Stock(std::vector<std::string> data_vector) {
-    id = data_vector[0];
-    name = data_vector[1];
-    description = data_vector[2];
-    double priceValue = std::stod(data_vector[3]);
+Stock::Stock(std::vector<std::string> dataVector) {
+    id = dataVector[0];
+    name = dataVector[1];
+    description = dataVector[2];
+    double priceValue = std::stod(dataVector[3]);
     price.dollars = (int) priceValue;
-    price.cents = (int) ((priceValue - price.dollars) * 100);
-    on_hand = (unsigned int) std::stoi(data_vector[4]);
+    price.cents = (int) (priceValue - price.dollars) * 100;
+    on_hand = (unsigned int) std::stoi(dataVector[4]);
 }

@@ -1,0 +1,6 @@
+/CMakeLists.txt
+/*.o
+./.idea
+.idea
+cmake-build-debug
+ppd

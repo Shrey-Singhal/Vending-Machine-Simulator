@@ -17,9 +17,9 @@ LinkedList::~LinkedList() {
     }
 }
 
-void LinkedList::addBack(std::vector<std::string> stock_data) {
+void LinkedList::addBack(const std::vector<std::string>& stockData) {
     Node* newNode = new Node();
-    auto* data = new Stock(stock_data);
+    auto* data = new Stock(stockData);
 
     newNode->data = data;
     newNode->next = nullptr;
@@ -71,26 +71,33 @@ void LinkedList::sortByName() {
     }
 }
 
-void LinkedList::remove(int index) {
+bool LinkedList::remove(const std::string& id) {
     Node* current = head;
     Node* prev = nullptr;
-    int i = 0; 
-    while (current != nullptr && i < index) {
-        prev = current;
-        current = current->next;
-        i++;
+    bool found = false;
+    while (current != nullptr && !found) {
+        if (current->data->id != id){
+            prev = current;
+            current = current->next;
+        }
+        else {
+            found = true;
+            if (prev == nullptr) {
+                head = current->next;
+            } else {
+                prev->next = current->next;
+            }
+
+
+        }
     }
 
-    if (current != nullptr) {
-        if (prev == nullptr) {
-            head = current->next;
-        } else {
-            prev->next = current->next;
-        }
-
+    if (found) {
         delete current;
         this->count -= 1;
     }
+
+    return found;
 }
 
 void LinkedList::resetStock() {
