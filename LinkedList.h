@@ -17,6 +17,8 @@ public:
     bool remove(const std::string &id);
     void resetStock();
 
+    bool getById(const std::string &id, Node &fillNode);
+
 private:
     // the beginning of the list
     Node* head;
@@ -26,7 +28,6 @@ private:
   
     // how many nodes are there in the list?
     unsigned count;
-
 
 
 };

@@ -1,5 +1,7 @@
 #ifndef APT_STOCKDATABASE_H
 #define APT_STOCKDATABASE_H
+
+#include <unordered_map>
 #include "LinkedList.h"
 
 class StockDatabase {
@@ -14,7 +16,11 @@ public:
     void saveData(const std::string& fileName);
     void resetStock();
 
+    void purchaseItem(std::unordered_map<unsigned, unsigned >& map);
+
 private:
     LinkedList* stockList;
+
+    bool coinLoop(std::unordered_map<unsigned, unsigned> &map, Node& userNode);
 };
 #endif //APT_STOCKDATABASE_H

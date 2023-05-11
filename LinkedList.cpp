@@ -15,6 +15,7 @@ LinkedList::~LinkedList() {
         currNode = currNode->next;
         delete(prevNode);
     }
+
 }
 
 void LinkedList::addBack(const std::vector<std::string>& stockData) {
@@ -95,6 +96,24 @@ bool LinkedList::remove(const std::string& id) {
     if (found) {
         delete current;
         this->count -= 1;
+    }
+
+    return found;
+}
+
+bool LinkedList::getById(const std::string& id, Node& fillNode) {
+    Node* current = head;
+    Node* prev = nullptr;
+    bool found = false;
+    while (current != nullptr && !found) {
+        if (current->data->id != id){
+            prev = current;
+            current = current->next;
+        }
+        else {
+            found = true;
+            fillNode = *current;
+        }
     }
 
     return found;

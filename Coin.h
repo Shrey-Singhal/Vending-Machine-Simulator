@@ -22,6 +22,8 @@ public:
     
     // the count of how many of these are in the cash register
     unsigned count;
+
+    static void printPrice(const unsigned int &costInCents);
 };
 
 #endif // COIN_H

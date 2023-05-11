@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
 
 using std::string;
 using std::vector;
@@ -26,7 +27,7 @@ void StockDatabase::addBack(const std::vector<std::string>& stockLine) {
 
 void StockDatabase::addItem() {
     string newItemId = "I";
-    int noOfZeroes = 4 -  std::to_string(stockList->size() + 1).length();
+    int noOfZeroes = 4 -  (int) std::to_string(stockList->size() + 1).length();
     for (int i = 0; i < noOfZeroes; ++i) {
         newItemId += "0";
     }
@@ -81,6 +82,35 @@ void StockDatabase::displayStock() {
     cout << endl;
 }
 
+void StockDatabase::purchaseItem(std::unordered_map<unsigned, unsigned>& map) {
+    cout << "Purchase Item\n"
+            "-------------\n"
+            "Please enter the id of the item you wish to purchase:";
+
+    std::string userChoice;
+    std::cin >> userChoice;
+
+    Node userNode;
+    if (stockList->getById(userChoice, userNode)) {
+        // Item found
+        std::cout << "You have selected \""
+        << userNode.data->name << " - " << userNode.data->description
+        << "\". This will cost you $ "
+        << userNode.data->price.dollars << "."
+        << std::setw(2) << std::setfill('0')
+        << userNode.data->price.cents << std::setfill(' ')
+        << ".\n";
+
+        std::cout << "Please hand over the money - type in the value of each note/coin in cents.\n";
+        std::cout << "Press enter or ctrl-d to cancel this purchase: " << std::endl;
+        bool success = coinLoop(map, userNode);
+    }
+    else {
+        std::cout << "Please select a valid ID.\n";
+    }
+
+}
+
 bool StockDatabase::removeItem() {
     cout << "Enter the item id of the item to remove from the menu: ";
     string itemId;
@@ -91,6 +121,9 @@ bool StockDatabase::removeItem() {
     if (!result) {
         cout << "Error: desired id was not found." << endl;
         cout << "The task Remove Item failed to run successfully.";
+    }
+    else {
+        cout << "Item " << itemId << " has been removed from the system.";
     }
 
     cout << endl;
@@ -131,4 +164,51 @@ void StockDatabase::saveData(const std::string& fileName) {
 
 void StockDatabase::resetStock() {
     stockList->resetStock();
+    cout << "All stock has been reset to the default level of "
+         << DEFAULT_STOCK_LEVEL << endl;
+    cout << endl;
+}
+
+bool StockDatabase::coinLoop(std::unordered_map<unsigned, unsigned> &map, Node& userNode) {
+    unsigned costInCents = userNode.data->price.dollars * 100;
+    costInCents += userNode.data->price.cents;
+    bool endLoop = false;
+
+    while (costInCents > 0 && !endLoop) {
+        std::cout << "You still need to give us ";
+        Coin::printPrice(costInCents);
+        std::cout << ": " << std::endl << std::setfill(' ') ;
+
+        unsigned userInput;
+        if (std::cin.eof()) {
+            endLoop = true;
+        }
+        std::cin >> userInput;
+
+
+        // Found denomination
+        if (map.count((int) userInput) > 0) {
+            // Check if change can be returned
+            // TODO
+
+            // Subtract from map if available
+            map[userInput] += 1;
+            costInCents -= userInput;
+
+        }
+        else {
+            std::cout << "Error: ";
+            Coin::printPrice(costInCents);
+            std::cout << " is not a valid denomination of money. Please try again.\n";
+        }
+
+    }
+    return true;
+
+}
+
+void Coin::printPrice(const unsigned& costInCents) {
+    std::cout << "$" << costInCents / 100 << "."
+              << std::setw(2) << std::setfill('0')
+              << costInCents % 100 << std::setfill(' ');
 }

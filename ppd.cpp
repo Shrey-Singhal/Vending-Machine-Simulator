@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <unordered_map>
 
 using std::cout;
 using std::endl;
@@ -57,6 +58,27 @@ std::vector<std::vector<std::string>> parseInput(std::ifstream& file) {
     return result;
 }
 
+std::unordered_map<unsigned, unsigned> parseCoinFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::unordered_map<unsigned, unsigned> dataMap;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string token;
+
+        std::getline(ss, token, ',');
+        int key = std::stoi(token);
+
+        std::getline(ss, token, ',');
+        int value = std::stoi(token);
+
+        dataMap[key] = value;
+    }
+
+    return dataMap;
+}
+
 int main(int argc, char *argv[])
 {
     int errorCode = EXIT_SUCCESS;
@@ -87,7 +109,7 @@ int main(int argc, char *argv[])
         }
 
         // Read coin file
-
+        auto coinMap = parseCoinFile(argv[2]);
 
         // Main Loop
         string user_choice;
@@ -101,6 +123,9 @@ int main(int argc, char *argv[])
             if (user_choice == "1") {
                 stockList.displayStock();
             }
+            else if (user_choice == "2") {
+                stockList.purchaseItem(coinMap);
+            }
             else if (user_choice == "3") {
                 stockList.saveData(argv[1]);
                 valid_loop = false;
@@ -109,15 +134,10 @@ int main(int argc, char *argv[])
                 stockList.addItem();
             }
             else if (user_choice == "5") {
-                cout << endl;
                 stockList.removeItem();
             }
             else if (user_choice == "7") {
-                cout << endl;
                 stockList.resetStock();
-                cout << "All stock has been reset to the default level of "
-                << DEFAULT_STOCK_LEVEL << endl;
-                cout << endl;
             }
             else if (user_choice == "9") {
                 valid_loop = false;
@@ -126,7 +146,7 @@ int main(int argc, char *argv[])
 
     }
 
-    return errorCode;
+    exit(errorCode);
 }
 
 
