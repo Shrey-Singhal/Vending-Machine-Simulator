@@ -42,20 +42,16 @@ public:
 class Stock
 {
 public:
-    //the unique id for this item
     std::string id;
 
-    //the name of this item
     std::string name;
-    
-    //the description of this item   
+
     std::string description;
-    
-    //the price of this item
+
     Price price;
-    
-    // how many of this item do we have on hand? 
+
     unsigned on_hand;
+
     Stock(std::vector<std::string> data_vector);    
 };
 

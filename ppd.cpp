@@ -14,23 +14,39 @@ using namespace std;
  **/
 
 void displayMainMenu();
-vector<string> tokenize(string s, char delimeter);
+vector<string> tokenize(string s, char delimiter);
 void displayStock(LinkedList* LL);
 void addItem(LinkedList* LL);
 void removeItem(LinkedList* LL);
 void saveData(LinkedList* LL);
 
+bool validateFileExistence(const string& filename) {
+    ifstream file(filename);
+    return file.good();
+}
+
 int main(int argc, char **argv)
 {
-    /* validate command line arguments */
-    // TODO
+    int errorCode = 0;
 
-    // open stock.dat file
-    ifstream infile("stock.dat", ios::binary);
+    if (argc != 2) {
+        cout << "Usage: ./ppd <stockfile> <coinsfile>\n" << endl;
+        errorCode = 1;
+    }
+    else if (!validateFileExistence(argv[0]) || !validateFileExistence(argv[1])) {
+        cout << "One or more of the provided files is invalid. Please provide a valid filename.\n" << endl;
+        return 1;
+    }
+    else {
+
+        // Read stock file
+        ifstream infile(argv[0], ios::binary);
+    }
+
 
     string line;
     vector<string> content;
-    LinkedList* LL = new LinkedList;
+    auto* LL = new LinkedList;
     // convert the content in the .dat file to a vector and add that vector to the linked list.
     while (getline(infile, line)) {
         content = tokenize(line, '|');
@@ -92,14 +108,13 @@ void displayMainMenu() {
     cout << "Select your option(1-9): ";
 }
 
-vector<string> tokenize(string s, char delimeter) {
+vector<string> tokenize(string s, char delimiter) {
     vector<string> tokens;
-    // stringstream ss(s);
     string token;
 
     string::size_type i;
     for (i = 0; i < s.length(); i++) {
-        if (s[i] != delimeter) {
+        if (s[i] != delimiter) {
             token += s[i];
         }
         else {

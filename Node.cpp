@@ -1,13 +1,14 @@
 #include "Node.h"
 
 Node::Node(){
-    // TODO
     data = nullptr;
     next = nullptr;
-};
+}
+
 Node::~Node(){
-    // TODO
-};
+    delete(data);
+    delete(next);
+}
 
 Stock::Stock(std::vector<std::string> data_vector) {
     id = data_vector[0];
