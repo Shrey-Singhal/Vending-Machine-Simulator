@@ -4,6 +4,9 @@
 #include <unordered_map>
 #include "LinkedList.h"
 
+/*
+ * Represents a more robust way to interface with the linked list
+ */
 class StockDatabase {
 public:
     StockDatabase();
