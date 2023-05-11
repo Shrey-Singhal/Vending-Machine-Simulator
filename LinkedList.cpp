@@ -4,19 +4,26 @@ LinkedList::LinkedList() {
    head = nullptr;
    tail = nullptr;
    count = 0;
-
-   // TODO
 }
 
 LinkedList::~LinkedList() {
-    // TODO
+    Node* currNode = head;
+    Node* prevNode;
+
+    while (currNode != nullptr) {
+        prevNode = currNode;
+        currNode = currNode->next;
+        delete(prevNode);
+    }
 }
 
 void LinkedList::addBack(std::vector<std::string> stock_data) {
     Node* newNode = new Node();
-    Stock* data = new Stock(stock_data);   
+    auto* data = new Stock(stock_data);
+
     newNode->data = data;
     newNode->next = nullptr;
+
     if (head == nullptr) {
         head = newNode;
         tail = newNode;
@@ -25,22 +32,22 @@ void LinkedList::addBack(std::vector<std::string> stock_data) {
         tail->next = newNode;
         tail = newNode;
     }
+
     this->count += 1;
 }
 
 
-Stock& LinkedList::get(int i) {
+Stock& LinkedList::get(int index) {
     Node* current = this->head;
     int x = 0;
 
-    while (x < i && current != nullptr) {
-
+    while (x < index && current != nullptr) {
         x += 1;
         current = current->next;
     }
     return *(current->data);
 }
-int LinkedList::size() {
+int LinkedList::size() const {
     return (int)count;
 }
 

@@ -11,8 +11,8 @@ public:
 
     // more functions to be added perhaps...
     void addBack(std::vector<std::string> stock_data);
-    int size();
-    Stock& get(int i); 
+    int size() const;
+    Stock& get(int index);
     void sortByName();
     void remove(int index);
     void resetStock();
