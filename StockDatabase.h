@@ -7,7 +7,7 @@ public:
     StockDatabase();
     ~StockDatabase();
 
-    void addBack(std::vector<std::string> stockLine);
+    void addBack(const std::vector<std::string>& stockLine);
     void addItem();
     void displayStock();
     bool removeItem();

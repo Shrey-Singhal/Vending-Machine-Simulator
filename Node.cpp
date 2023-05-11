@@ -17,5 +17,6 @@ Stock::Stock(std::vector<std::string> dataVector) {
     double priceValue = std::stod(dataVector[3]);
     price.dollars = (int) priceValue;
     price.cents = (int) (priceValue - price.dollars) * 100;
-    on_hand = (unsigned int) std::stoi(dataVector[4]);
+    onHand = (unsigned int) std::stoi(dataVector[4]);
+
 }

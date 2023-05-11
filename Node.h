@@ -50,7 +50,7 @@ public:
 
     Price price;
 
-    unsigned on_hand;
+    unsigned onHand;
 
     Stock(std::vector<std::string> dataVector);
 };

@@ -12,7 +12,7 @@ public:
     // more functions to be added perhaps...
     void addBack(const std::vector<std::string> &stockData);
     int size() const;
-    Stock& get(int index);
+    Node * get(int index);
     void sortByName();
     bool remove(const std::string &id);
     void resetStock();

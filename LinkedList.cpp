@@ -37,7 +37,7 @@ void LinkedList::addBack(const std::vector<std::string>& stockData) {
 }
 
 
-Stock& LinkedList::get(int index) {
+Node* LinkedList::get(int index) {
     Node* current = this->head;
     int x = 0;
 
@@ -45,7 +45,7 @@ Stock& LinkedList::get(int index) {
         x += 1;
         current = current->next;
     }
-    return *(current->data);
+    return current;
 }
 int LinkedList::size() const {
     return (int)count;
@@ -105,7 +105,7 @@ void LinkedList::resetStock() {
 
     while (current != nullptr) {
         Stock* currentData = current->data;
-        currentData->on_hand = DEFAULT_STOCK_LEVEL;
+        currentData->onHand = DEFAULT_STOCK_LEVEL;
     
         current = current->next;
     }

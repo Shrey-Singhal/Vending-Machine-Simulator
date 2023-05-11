@@ -19,7 +19,7 @@ StockDatabase::~StockDatabase() {
     delete(stockList);
 }
 
-void StockDatabase::addBack(std::vector<std::string> stockLine) {
+void StockDatabase::addBack(const std::vector<std::string>& stockLine) {
     stockList->addBack(stockLine);
     stockList->sortByName();
 }
@@ -69,13 +69,13 @@ void StockDatabase::displayStock() {
 
     for (int i = 0; i < stockList->size(); ++i) {
         cout << std::setfill(' ');
-        cout << left << std::setw(5) << stockList->get(i).id << "|";
-        cout << left << std::setw(39) << stockList->get(i).name << "|";
-        cout << left << std::setw(10) << stockList->get(i).on_hand << " |";
+        cout << left << std::setw(5) << stockList->get(i)->data->id << "|";
+        cout << left << std::setw(39) << stockList->get(i)->data->name << "|";
+        cout << left << std::setw(10) << stockList->get(i)->data->onHand << " |";
         cout << std::fixed << std::setprecision(3)
-        << "$ " << stockList->get(i).price.dollars << ".";
+        << "$ " << stockList->get(i)->data->price.dollars << ".";
         cout << std::setfill('0') << std::setw(2) <<
-        stockList->get(i).price.cents << endl;
+        stockList->get(i)->data->price.cents << endl;
     }
 
     cout << endl;
@@ -100,20 +100,31 @@ bool StockDatabase::removeItem() {
 void StockDatabase::saveData(const std::string& fileName) {
     // Open the file in write mode to clear all the content
     std::ofstream outFile(fileName, std::ios::out | std::ios::trunc);
-
+    if (!outFile) {
+        std::cerr << "can't open output file" << endl;
+    }
     outFile.close();
 
     // Reopen the file in append mode to write new content
-    outFile.open("stock.dat", std::ios::out | std::ios::app);
+    outFile.open(fileName, std::ios::out | std::ios::app);
 
     // Write new content to the file
-    for (int i = 0; i < stockList->size(); ++i) {
-        outFile << stockList->get(i).id <<"|" << stockList->get(i).name << "|" << stockList->get(i).description << "|" <<
-             stockList->get(i).price.dollars << "." << stockList->get(i).price.cents << "|" << stockList->get(i).on_hand;
-        if (i < stockList->size() - 1) {
-            outFile << endl;
-        }
+    Node* currNode = stockList->get(0);
+    while (currNode != nullptr) {
+        outFile << currNode->data->id << "|";
+        outFile << currNode->data->name << "|";
+        outFile << currNode->data->description << "|";
+        outFile << currNode->data->price.dollars << ".";
+        outFile << std::setw(2);
+        outFile << std::setfill('0');
+        outFile << currNode->data->price.cents << "|";
+        outFile << std::setfill(' ');
+        outFile << currNode->data->onHand << "|";
+        outFile << endl;
+
+        currNode = currNode->next;
     }
+
 
     outFile.close();
 }
