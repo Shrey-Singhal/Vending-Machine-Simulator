@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
         std::string user_choice;
         bool valid_loop = true;
 
-        while (valid_loop) {
+        while (valid_loop && !std::cin.eof()) {
 
             displayMainMenu();
             std::cin >> user_choice;

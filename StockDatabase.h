@@ -24,7 +24,6 @@ public:
 
 private:
     LinkedList* stockList;
-    std::map<unsigned, unsigned>* coinList;
 
     static bool
     dispenseCoins(std::map<unsigned int, unsigned int> &coins,
