@@ -19,10 +19,7 @@ LinkedList::~LinkedList() {
 }
 
 void LinkedList::addBack(const std::vector<std::string>& stockData) {
-    Node* newNode = new Node();
-    auto* data = new Stock(stockData);
-
-    newNode->data = data;
+    Node* newNode = new Node(stockData);
     newNode->next = nullptr;
 
     if (head == nullptr) {

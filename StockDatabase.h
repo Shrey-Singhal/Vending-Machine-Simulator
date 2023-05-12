@@ -22,8 +22,6 @@ public:
 
     void purchaseItem(std::map<unsigned int, unsigned int> &map);
 
-    static void resetCoins(std::map<unsigned int, unsigned int> &coinMap);
-
 private:
     LinkedList* stockList;
     std::map<unsigned, unsigned>* coinList;

@@ -30,10 +30,8 @@ bool validateFileExistence(const std::string& filename) {
     return file.good();
 }
 
-StockDatabase parseStockFile(const std::string& filename) {
+void parseStockFile(const std::string& filename, StockDatabase& db) {
     std::ifstream file(filename);
-
-    StockDatabase result;
     std::string line;
 
     // Read lines from file and tokenize
@@ -46,13 +44,12 @@ StockDatabase parseStockFile(const std::string& filename) {
             tokens.push_back(token);
         }
 
-        if (line.size() == 5) {
-            result.addBack(tokens);
+        if (tokens.size() == 5) {
+            db.addBack(tokens);
         }
     }
 
     file.close();
-    return result;
 }
 
 int main(int argc, char *argv[])
@@ -74,7 +71,7 @@ int main(int argc, char *argv[])
     // All args valid
     else {
         // Read stock file
-        stockList = parseStockFile(argv[1]);
+        parseStockFile(argv[1], stockList);
 
         // Read coin file
         auto coinMap = Coin::parseCoinFile(argv[2]);

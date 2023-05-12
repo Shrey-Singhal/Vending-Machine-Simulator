@@ -1,6 +1,11 @@
 #include "Node.h"
 
-Node::Node(){
+Node::Node(const std::vector<std::string>& dataVector){
+    data = new Stock(dataVector);
+    next = nullptr;
+}
+
+Node::Node() {
     data = nullptr;
     next = nullptr;
 }

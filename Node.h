@@ -62,6 +62,9 @@ class Node
 {
 public:
     Node();
+
+    Node(const std::vector<std::string>& dataVector);
+
     ~Node();
     // pointer to the data held for the node 
     Stock* data;

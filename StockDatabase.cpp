@@ -14,7 +14,6 @@ using std::left;
 
 StockDatabase::StockDatabase() {
     stockList = new LinkedList();
-    coinList = new std::map<unsigned, unsigned>();
 }
 
 StockDatabase::~StockDatabase() {
@@ -67,8 +66,6 @@ void StockDatabase::displayStock() {
     cout << "----------" << endl;
     cout << "ID   |Name                                   | Available | Price" << endl;
     cout << "-------------------------------------------------------------------" << endl;
-
-    cout << endl;
 
     for (int i = 0; i < stockList->size(); ++i) {
         auto currStock = stockList->get(i);
@@ -158,7 +155,7 @@ void StockDatabase::saveData(const std::string& fileName) {
         outFile << std::setfill('0');
         outFile << currNode->data->price.cents << "|";
         outFile << std::setfill(' ');
-        outFile << currNode->data->onHand << "|";
+        outFile << currNode->data->onHand;
         outFile << endl;
 
         currNode = currNode->next;
