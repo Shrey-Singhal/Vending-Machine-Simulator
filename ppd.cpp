@@ -58,9 +58,9 @@ std::vector<std::vector<std::string>> parseInput(std::ifstream& file) {
     return result;
 }
 
-std::unordered_map<unsigned, unsigned> parseCoinFile(const std::string& filename) {
+std::map<unsigned, unsigned> parseCoinFile(const std::string& filename) {
     std::ifstream file(filename);
-    std::unordered_map<unsigned, unsigned> dataMap;
+    std::map<unsigned, unsigned> dataMap;
     std::string line;
 
     while (std::getline(file, line)) {
@@ -78,6 +78,38 @@ std::unordered_map<unsigned, unsigned> parseCoinFile(const std::string& filename
 
     return dataMap;
 }
+
+void displayCoins(const std::map<unsigned, unsigned>& coinMap) {
+    cout << endl;
+    cout << "Coins Summary" << endl;
+    cout << "-------------" << endl;
+    cout << "Denomination    |    Count" << endl;
+    cout << "---------------------------" << endl;
+
+    for (auto denom: coinMap) {
+        unsigned denomination = denom.first;
+        unsigned amount = denom.second;
+        std::stringstream centOrDollar;
+
+
+        if (denomination % 100 == 0) {
+            centOrDollar << denomination / 100;
+            centOrDollar << " Dollars";
+        }
+        else {
+            centOrDollar << denomination;
+            centOrDollar << " Cents";
+        }
+
+        cout << std::setfill(' ');
+        cout << std::left << std::setw(16) << centOrDollar.str();
+        std::cout << "|";
+        std::cout << std::right << std::setw(10) << amount << std::endl;
+
+    }
+    std::cout << std::endl;
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -128,6 +160,7 @@ int main(int argc, char *argv[])
             }
             else if (user_choice == "3") {
                 stockList.saveData(argv[1]);
+                stockList.saveCoins(argv[2], coinMap);
                 valid_loop = false;
             }
             else if (user_choice == "4") {
@@ -136,8 +169,14 @@ int main(int argc, char *argv[])
             else if (user_choice == "5") {
                 stockList.removeItem();
             }
+            else if (user_choice == "6") {
+                displayCoins(coinMap);
+            }
             else if (user_choice == "7") {
                 stockList.resetStock();
+            }
+            else if (user_choice == "8") {
+                stockList.resetCoins(coinMap);
             }
             else if (user_choice == "9") {
                 valid_loop = false;

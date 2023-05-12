@@ -2,6 +2,7 @@
 #define APT_STOCKDATABASE_H
 
 #include <unordered_map>
+#include <map>
 #include "LinkedList.h"
 
 /*
@@ -21,9 +22,26 @@ public:
 
     void purchaseItem(std::unordered_map<unsigned, unsigned >& map);
 
+    void purchaseItem(std::map<unsigned int, unsigned int> &map);
+
+    void saveCoins(const std::string &fileName,
+                   const std::map<unsigned int, unsigned int>& map);
+
+    void resetCoins(std::map<unsigned int, unsigned int> &coinMap);
+
 private:
     LinkedList* stockList;
+    std::map<unsigned, unsigned>* coinList;
 
-    bool coinLoop(std::unordered_map<unsigned, unsigned> &map, Node& userNode);
+    bool dispenseCoins(const std::map<unsigned int, unsigned int> &coins,
+                       unsigned int amount, bool checkOnly);
+
+    static bool
+    dispenseCoins(std::map<unsigned int, unsigned int> &coins,
+                  unsigned int amount,
+                  bool checkOnly);
+
+    bool coinLoop(std::map<unsigned int, unsigned int> &map, Node &userNode);
+
 };
 #endif //APT_STOCKDATABASE_H

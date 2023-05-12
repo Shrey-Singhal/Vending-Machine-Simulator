@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <map>
 
 using std::string;
 using std::vector;
@@ -14,6 +15,7 @@ using std::left;
 
 StockDatabase::StockDatabase() {
     stockList = new LinkedList();
+    coinList = new std::map<unsigned, unsigned>();
 }
 
 StockDatabase::~StockDatabase() {
@@ -47,7 +49,8 @@ void StockDatabase::addItem() {
     string itemPrice;
     getline(cin >> ws, itemPrice);
 
-    cout << "This item \"" << itemName << " - " << itemDescription << "\" has now been added to the menu.\n" << endl;
+    cout << "This item \"" << itemName << " - " << itemDescription
+    << "\" has now been added to the menu.\n" << endl;
 
     vector<string> content;
     content.push_back(newItemId);
@@ -70,9 +73,12 @@ void StockDatabase::displayStock() {
 
     for (int i = 0; i < stockList->size(); ++i) {
         cout << std::setfill(' ');
-        cout << left << std::setw(5) << stockList->get(i)->data->id << "|";
-        cout << left << std::setw(39) << stockList->get(i)->data->name << "|";
-        cout << left << std::setw(10) << stockList->get(i)->data->onHand << " |";
+        cout << left << std::setw(5)
+        << stockList->get(i)->data->id << "|";
+        cout << left << std::setw(39)
+        << stockList->get(i)->data->name << "|";
+        cout << left << std::setw(10)
+        << stockList->get(i)->data->onHand << " |";
         cout << std::fixed << std::setprecision(3)
         << "$ " << stockList->get(i)->data->price.dollars << ".";
         cout << std::setfill('0') << std::setw(2) <<
@@ -82,7 +88,7 @@ void StockDatabase::displayStock() {
     cout << endl;
 }
 
-void StockDatabase::purchaseItem(std::unordered_map<unsigned, unsigned>& map) {
+void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
     cout << "Purchase Item\n"
             "-------------\n"
             "Please enter the id of the item you wish to purchase:";
@@ -104,6 +110,9 @@ void StockDatabase::purchaseItem(std::unordered_map<unsigned, unsigned>& map) {
         std::cout << "Please hand over the money - type in the value of each note/coin in cents.\n";
         std::cout << "Press enter or ctrl-d to cancel this purchase: " << std::endl;
         bool success = coinLoop(map, userNode);
+        if (!success) {
+            std::cout << "Change is not available for that amount of money. Please try again.";
+        }
     }
     else {
         std::cout << "Please select a valid ID.\n";
@@ -169,7 +178,13 @@ void StockDatabase::resetStock() {
     cout << endl;
 }
 
-bool StockDatabase::coinLoop(std::unordered_map<unsigned, unsigned> &map, Node& userNode) {
+void StockDatabase::resetCoins(std::map<unsigned, unsigned>& coinMap) {
+    for (auto denom: coinMap) {
+        coinMap[denom.first] = DEFAULT_COIN_COUNT;
+    }
+}
+
+bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) {
     unsigned costInCents = userNode.data->price.dollars * 100;
     costInCents += userNode.data->price.cents;
     bool endLoop = false;
@@ -189,12 +204,24 @@ bool StockDatabase::coinLoop(std::unordered_map<unsigned, unsigned> &map, Node& 
         // Found denomination
         if (map.count((int) userInput) > 0) {
             // Check if change can be returned
-            // TODO
+            int valAfterCoin = (int) costInCents - userInput;
 
-            // Subtract from map if available
-            map[userInput] += 1;
-            costInCents -= userInput;
+            if (valAfterCoin < 0) {
+                endLoop = !dispenseCoins(map, -valAfterCoin, false);
+            }
 
+
+            if (!endLoop){
+                // Subtract from map if available
+                map[userInput] += 1;
+
+                if (valAfterCoin >= 0){
+                    costInCents -= userInput;
+                }
+                else {
+                    costInCents = 0;
+                }
+            }
         }
         else {
             std::cout << "Error: ";
@@ -203,7 +230,85 @@ bool StockDatabase::coinLoop(std::unordered_map<unsigned, unsigned> &map, Node& 
         }
 
     }
-    return true;
+
+    return endLoop;
+
+}
+
+bool StockDatabase::dispenseCoins(std::map<unsigned, unsigned>& coins, unsigned amount, bool checkOnly) {
+    std::cout << "Your change of ";
+    Coin::printPrice(amount);
+    std::cout << ":" << std::endl;
+    bool canBeDispensed;
+
+    std::map<unsigned, unsigned> changeCoins;
+
+    // Iterate over the denominations in descending order
+    bool stopLoop = false;
+    for (auto it = coins.rbegin(); it != coins.rend() && !stopLoop; ++it) {
+
+        unsigned denomination = it->first;
+        unsigned quantity = it->second;
+
+        // Calculate the number of coins required for the current denomination
+        unsigned numCoins = std::min(amount / denomination, quantity);
+
+        if (numCoins > 0){
+            changeCoins[denomination] = numCoins;
+        }
+
+        // Update the remaining amount
+        amount -= numCoins * denomination;
+
+        // Break the loop if the amount becomes zero
+        if (amount == 0) {
+            stopLoop = true;
+        }
+    }
+
+    // If the amount is still not zero, it cannot be dispensed with the available coins
+    if (amount != 0) {
+        canBeDispensed = false;
+    }
+    // Print and dispense change
+    else {
+        canBeDispensed = true;
+        for (auto & changeCoin : changeCoins) {
+            unsigned denomination = changeCoin.first;
+            unsigned& quantity = changeCoin.second;
+            Coin::printPrice(denomination);
+            std::cout << " x " << quantity << " ";
+
+            if (!checkOnly) {
+                coins[denomination] -= quantity;
+            }
+        }
+
+        std::cout << std::endl;
+    }
+
+    return canBeDispensed;
+}
+
+void StockDatabase::saveCoins(const std::string& fileName,
+                              const std::map<unsigned int, unsigned int>& map) {
+    // Open the file in write mode to clear all the content
+    std::ofstream outFile(fileName, std::ios::out | std::ios::trunc);
+    if (!outFile) {
+        std::cerr << "can't open output file" << endl;
+    }
+    outFile.close();
+
+    // Reopen the file in append mode to write new content
+    outFile.open(fileName, std::ios::out | std::ios::app);
+
+    // Write new content to the file
+    for (auto denom = map.rbegin(); denom != map.rend(); ++denom) {
+
+        outFile << denom->first << "," << denom->second << std::endl;
+    }
+
+    outFile.close();
 
 }
 
