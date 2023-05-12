@@ -2,10 +2,8 @@
 #include "Node.h"
 #include <map>
 #include <iostream>
-#include <sstream>
 #include <iomanip>
 #include <fstream>
-#include <map>
 
 
 void Coin::displayCoins(const std::map<unsigned, unsigned>& coinMap) {
@@ -18,7 +16,7 @@ void Coin::displayCoins(const std::map<unsigned, unsigned>& coinMap) {
         unsigned denomination = denom.first;
         unsigned amount = denom.second;
 
-        // Create representation string
+        // Create representation string e.g. 1 Dollars or 50 Cents
         std::stringstream centOrDollar;
         if (denomination % 100 == 0) {
             centOrDollar << denomination / 100;
@@ -39,6 +37,29 @@ void Coin::displayCoins(const std::map<unsigned, unsigned>& coinMap) {
     std::cout << std::endl;
 }
 
+std::map<unsigned, unsigned> Coin::parseCoinFile(const std::string& filename) {
+    std::ifstream file(filename);
+
+    std::map<unsigned, unsigned> dataMap;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string token;
+
+        std::getline(ss, token, ',');
+        int key = std::stoi(token);
+
+        std::getline(ss, token, ',');
+        int value = std::stoi(token);
+
+        dataMap[key] = value;
+    }
+
+    file.close();
+    return dataMap;
+}
+
 void Coin::saveCoins(const std::string& fileName,
                               const std::map<unsigned int, unsigned int>& map) {
     // Open the file in write mode to clear all the content
@@ -54,7 +75,7 @@ void Coin::saveCoins(const std::string& fileName,
     // Write new content to the file
     for (auto coinDenom = map.rbegin(); coinDenom != map.rend(); ++coinDenom) {
 
-        outFile << coinDenom->first << "," << coinDenom->second << std::endl;
+        outFile << coinDenom->first << DELIM << coinDenom->second << std::endl;
     }
 
     outFile.close();

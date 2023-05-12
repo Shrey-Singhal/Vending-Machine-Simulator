@@ -48,8 +48,9 @@ Node* LinkedList::get(int index) {
     }
     return current;
 }
-int LinkedList::size() const {
-    return (int)count;
+
+size_t LinkedList::size() const {
+    return count;
 }
 
 void LinkedList::sortByName() {

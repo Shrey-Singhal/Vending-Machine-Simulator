@@ -11,12 +11,11 @@ public:
 
     // more functions to be added perhaps...
     void addBack(const std::vector<std::string> &stockData);
-    int size() const;
+    size_t size() const;
     Node * get(int index);
     void sortByName();
     bool remove(const std::string &id);
     void resetStock();
-
     bool getById(const std::string &id, Node &fillNode);
 
 private:
@@ -27,7 +26,7 @@ private:
     Node* tail;
   
     // how many nodes are there in the list?
-    unsigned count;
+    size_t count;
 
 
 };

@@ -34,6 +34,9 @@ public:
                          const std::map<unsigned int, unsigned int>& map);
 
     static void resetCoins(std::map<unsigned int, unsigned int> &coinMap);
+
+    static std::map<unsigned int, unsigned int>
+    parseCoinFile(const std::string &filename);
 };
 
 #endif // COIN_H
