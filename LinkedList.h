@@ -18,9 +18,9 @@ public:
     void resetStock();
     bool getById(const std::string &id, Node &fillNode);
 
+// the beginning of the list
+Node* head;
 private:
-    // the beginning of the list
-    Node* head;
 
     // pointer to the last node in list
     Node* tail;

@@ -145,7 +145,7 @@ void StockDatabase::saveData(const std::string& fileName) {
     outFile.open(fileName, std::ios::out | std::ios::app);
 
     // Write new content to the file
-    Node* currNode = stockList->get(0);
+    Node* currNode = stockList->head;
     while (currNode != nullptr) {
         outFile << currNode->data->id << "|";
         outFile << currNode->data->name << "|";
