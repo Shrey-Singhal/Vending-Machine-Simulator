@@ -67,7 +67,7 @@ void StockDatabase::displayStock() {
     cout << "ID   |Name                                   | Available | Price" << endl;
     cout << "-------------------------------------------------------------------" << endl;
 
-    for (int i = 0; i < stockList->size(); ++i) {
+    for (int i = 0; i < (int) stockList->size(); ++i) {
         auto currStock = stockList->get(i);
         cout << std::setfill(' ');
         cout << left << std::setw(5)
