@@ -43,21 +43,39 @@ void StockDatabase::addItem() {
     string itemDescription;
     getline(cin >> ws, itemDescription);
 
-    cout << "Enter the price for the item: ";
-    string itemPrice;
-    getline(cin >> ws, itemPrice);
+    bool valid_loop = true;
+    while (valid_loop) {
 
-    cout << "This item \"" << itemName << " - " << itemDescription
-    << "\" has now been added to the menu.\n" << endl;
+        cout << "Enter the price for the item: ";
+        string itemPrice;
+        getline(cin >> ws, itemPrice);
+        long double ld;
+        if ((std::istringstream(itemPrice) >> ld >> std::ws).eof() && itemPrice.find('.') != std::string::npos){
+            size_t dotIndex = itemPrice.find('.');
+            std::string centPart = itemPrice.substr(dotIndex + 1);
+            int cents = std::stoi(centPart);
+            if (cents % 5 == 0){
+                cout << "This item \"" << itemName << " - " << itemDescription
+                << "\" has now been added to the menu.\n" << endl;
 
-    vector<string> content;
-    content.push_back(newItemId);
-    content.push_back(itemName);
-    content.push_back(itemDescription);
-    content.push_back(itemPrice);
-    content.push_back(std::to_string(DEFAULT_STOCK_LEVEL));
+                vector<string> content;
+                content.push_back(newItemId);
+                content.push_back(itemName);
+                content.push_back(itemDescription);
+                content.push_back(itemPrice);
+                content.push_back(std::to_string(DEFAULT_STOCK_LEVEL));
 
-    addBack(content);
+                addBack(content);
+                valid_loop = false;
+            }
+            else {
+                cout << "Error: the cents need to be a multiple of 5." << endl;
+            }
+        }
+        else{
+            cout << "Error: the price is not valid." << endl;
+        }
+    }
 }
 
 void StockDatabase::displayStock() {
@@ -87,29 +105,34 @@ void StockDatabase::displayStock() {
 
 void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
     cout << "Purchase Item\n"
-            "-------------\n"
-            "Please enter the id of the item you wish to purchase:";
+            "-------------\n";
+    
 
-    std::string userChoice;
-    std::cin >> userChoice;
+    bool valid_loop = true;
+    while (valid_loop){
+        cout << "Please enter the id of the item you wish to purchase:";
+        std::string userChoice;
+        std::cin >> userChoice;
 
-    Node userNode;
-    if (stockList->getById(userChoice, userNode)) {
-        // Item found
-        std::cout << "You have selected \""
-        << userNode.data->name << " - " << userNode.data->description
-        << "\". This will cost you $ "
-        << userNode.data->price.dollars << "."
-        << std::setw(2) << std::setfill('0')
-        << userNode.data->price.cents << std::setfill(' ')
-        << ".\n";
+        Node userNode;
+        if (stockList->getById(userChoice, userNode)) {
+            // Item found
+            std::cout << "You have selected \""
+            << userNode.data->name << " - " << userNode.data->description
+            << "\". This will cost you $ "
+            << userNode.data->price.dollars << "."
+            << std::setw(2) << std::setfill('0')
+            << userNode.data->price.cents << std::setfill(' ')
+            << ".\n";
 
-        std::cout << "Please hand over the money - type in the value of each note/coin in cents.\n";
-        std::cout << "Press enter or ctrl-d to cancel this purchase: " << std::endl;
-        coinLoop(map, userNode);
-    }
-    else {
-        std::cout << "Please select a valid ID.\n";
+            std::cout << "Please hand over the money - type in the value of each note/coin in cents.\n";
+            std::cout << "Press enter or ctrl-d to cancel this purchase: " << std::endl;
+            coinLoop(map, userNode);
+            valid_loop = false;
+        }
+        else {
+            cout << "Error: you did not enter a valid id. Please try again.\n";
+        }
     }
 
 }
@@ -178,45 +201,53 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
     unsigned costInCents = userNode.data->price.dollars * 100;
     costInCents += userNode.data->price.cents;
     bool endLoop = false;
+    bool return_val = true;
 
     while (costInCents > 0 && !endLoop) {
         std::cout << "You still need to give us ";
         Coin::printPrice(costInCents);
         std::cout << ": " << std::endl << std::setfill(' ') ;
 
-        unsigned userInput;
+        string input;
         if (std::cin.eof()) {
             endLoop = true;
         }
-        std::cin >> userInput;
+        std::cin >> input;
 
-
+        if (input.find_first_not_of( "0123456789" ) == std::string::npos){
+            unsigned userInput = std::stoul(input);
         // Found denomination
-        if (map.count((int) userInput) > 0) {
-            // Check if change can be returned
-            int valAfterCoin = (int) costInCents - userInput;
+            if (map.count((int) userInput) > 0) {
+                // Check if change can be returned
+                int valAfterCoin = (int) costInCents - userInput;
 
-            if (valAfterCoin < 0) {
-                endLoop = !dispenseCoins(map, -valAfterCoin, false);
-            }
-
-
-            if (!endLoop){
-                // Subtract from map if available
-                map[userInput] += 1;
-
-                if (valAfterCoin >= 0){
-                    costInCents -= userInput;
+                if (valAfterCoin < 0) {
+                    endLoop = !dispenseCoins(map, -valAfterCoin, false);
                 }
-                else {
-                    costInCents = 0;
+
+
+                if (!endLoop){
+                    // Subtract from map if available
+                    map[userInput] += 1;
+
+                    if (valAfterCoin >= 0){
+                        costInCents -= userInput;
+                    }
+                    else {
+                        costInCents = 0;
+                    }
+                }
+            
+                else if (endLoop){
+                    std::cout << "Error: ";
+                    Coin::printPrice(costInCents);
+                    std::cout << " is not a valid denomination of money. Please try again.\n";
                 }
             }
         }
-        else if (endLoop){
-            std::cout << "Error: ";
-            Coin::printPrice(costInCents);
-            std::cout << " is not a valid denomination of money. Please try again.\n";
+        else {
+            cout << "Error: you did not enter a valid int. Please try again." << endl;
+            return_val = false;
         }
 
     }
@@ -225,7 +256,7 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
         std::cout << "Successful Purchase!" << std::endl;
     }
 
-    return true;
+    return return_val;
 
 }
 
