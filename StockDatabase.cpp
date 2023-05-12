@@ -43,21 +43,39 @@ void StockDatabase::addItem() {
     string itemDescription;
     getline(cin >> ws, itemDescription);
 
-    cout << "Enter the price for the item: ";
-    string itemPrice;
-    getline(cin >> ws, itemPrice);
+    bool valid_loop = true;
+    while (valid_loop) {
 
-    cout << "This item \"" << itemName << " - " << itemDescription
-    << "\" has now been added to the menu.\n" << endl;
+        cout << "Enter the price for the item: ";
+        string itemPrice;
+        getline(cin >> ws, itemPrice);
+        long double ld;
+        if ((std::istringstream(itemPrice) >> ld >> std::ws).eof() && itemPrice.find('.') != std::string::npos){
+            size_t dotIndex = itemPrice.find('.');
+            std::string centPart = itemPrice.substr(dotIndex + 1);
+            int cents = std::stoi(centPart);
+            if (cents % 5 == 0){
+                cout << "This item \"" << itemName << " - " << itemDescription
+                << "\" has now been added to the menu.\n" << endl;
 
-    vector<string> content;
-    content.push_back(newItemId);
-    content.push_back(itemName);
-    content.push_back(itemDescription);
-    content.push_back(itemPrice);
-    content.push_back(std::to_string(DEFAULT_STOCK_LEVEL));
+                vector<string> content;
+                content.push_back(newItemId);
+                content.push_back(itemName);
+                content.push_back(itemDescription);
+                content.push_back(itemPrice);
+                content.push_back(std::to_string(DEFAULT_STOCK_LEVEL));
 
-    addBack(content);
+                addBack(content);
+                valid_loop = false;
+            }
+            else {
+                cout << "Error: the cents need to be a multiple of 5." << endl;
+            }
+        }
+        else{
+            cout << "Error: the price is not valid." << endl;
+        }
+    }
 }
 
 void StockDatabase::displayStock() {
