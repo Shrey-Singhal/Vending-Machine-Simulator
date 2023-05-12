@@ -48,11 +48,11 @@ public:
 
     std::string description;
 
-    Price price;
+    Price price{};
 
     unsigned onHand;
 
-    Stock(std::vector<std::string> dataVector);
+    explicit Stock(std::vector<std::string> dataVector);
 };
 
 /**

@@ -4,42 +4,36 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <iomanip>
-#include <unordered_map>
 
 using std::cout;
 using std::endl;
-using std::string;
 using std::cin;
 
-/**
- * manages the running of the program, initialises data structures, loads
- * data, display the main menu, and handles the processing of options. 
- * Make sure free memory and close all files before exiting the program.
- **/
 
 void displayMainMenu() {
-    cout << "Main Menu:" << endl;
-    cout << "  1.Display Items" << endl;
-    cout << "  2.Purchase Items" << endl;
-    cout << "  3.Save and Exit" << endl;
-    cout << "Administrator-Only Menu:" << endl;
-    cout << "  4.Add Item" << endl;
-    cout << "  5.Remove Item" << endl;
-    cout << "  6.Display Coins" << endl;
-    cout << "  7.Reset Stock" << endl;
-    cout << "  8.Reset Coins" << endl;
-    cout << "  9.Abort Program" << endl;
-    cout << "Select your option (1-9): ";
+    cout << "Main Menu:\n"
+            "  1.Display Items\n"
+            "  2.Purchase Items\n"
+            "  3.Save and Exit\n"
+            "Administrator-Only Menu:\n"
+            "  4.Add Item\n"
+            "  5.Remove Item\n"
+            "  6.Display Coins\n"
+            "  7.Reset Stock\n"
+            "  8.Reset Coins\n"
+            "  9.Abort Program\n"
+            "Select your option (1-9):" << std::endl;
 }
 
-bool validateFileExistence(const string& filename) {
+bool validateFileExistence(const std::string& filename) {
     std::ifstream file(filename);
     return file.good();
 }
 
-std::vector<std::vector<std::string>> parseInput(std::ifstream& file) {
-    std::vector<std::vector<std::string>> result;
+StockDatabase parseStockFile(const std::string& filename) {
+    std::ifstream file(filename);
+
+    StockDatabase result;
     std::string line;
 
     // Read lines from file and tokenize
@@ -52,14 +46,18 @@ std::vector<std::vector<std::string>> parseInput(std::ifstream& file) {
             tokens.push_back(token);
         }
 
-        result.push_back(tokens);
+        if (line.size() == 5) {
+            result.addBack(tokens);
+        }
     }
 
+    file.close();
     return result;
 }
 
 std::map<unsigned, unsigned> parseCoinFile(const std::string& filename) {
     std::ifstream file(filename);
+
     std::map<unsigned, unsigned> dataMap;
     std::string line;
 
@@ -76,40 +74,9 @@ std::map<unsigned, unsigned> parseCoinFile(const std::string& filename) {
         dataMap[key] = value;
     }
 
+    file.close();
     return dataMap;
 }
-
-void displayCoins(const std::map<unsigned, unsigned>& coinMap) {
-    cout << endl;
-    cout << "Coins Summary" << endl;
-    cout << "-------------" << endl;
-    cout << "Denomination    |    Count" << endl;
-    cout << "---------------------------" << endl;
-
-    for (auto denom: coinMap) {
-        unsigned denomination = denom.first;
-        unsigned amount = denom.second;
-        std::stringstream centOrDollar;
-
-
-        if (denomination % 100 == 0) {
-            centOrDollar << denomination / 100;
-            centOrDollar << " Dollars";
-        }
-        else {
-            centOrDollar << denomination;
-            centOrDollar << " Cents";
-        }
-
-        cout << std::setfill(' ');
-        cout << std::left << std::setw(16) << centOrDollar.str();
-        std::cout << "|";
-        std::cout << std::right << std::setw(10) << amount << std::endl;
-
-    }
-    std::cout << std::endl;
-}
-
 
 int main(int argc, char *argv[])
 {
@@ -130,28 +97,21 @@ int main(int argc, char *argv[])
     // All args valid
     else {
         // Read stock file
-        std::ifstream infile(argv[1], std::ios::binary);
-        auto parsedLines = parseInput(infile);
-        infile.close();
-
-        for (const auto& line:parsedLines) {
-            if (line.size() == 5) {
-                stockList.addBack(line);
-            }
-        }
+        stockList = parseStockFile(argv[1]);
 
         // Read coin file
         auto coinMap = parseCoinFile(argv[2]);
 
         // Main Loop
-        string user_choice;
+        std::string user_choice;
         bool valid_loop = true;
 
         while (valid_loop) {
 
             displayMainMenu();
-            cin>>user_choice;
+            cin >> user_choice;
 
+            // All options
             if (user_choice == "1") {
                 stockList.displayStock();
             }
@@ -160,7 +120,7 @@ int main(int argc, char *argv[])
             }
             else if (user_choice == "3") {
                 stockList.saveData(argv[1]);
-                stockList.saveCoins(argv[2], coinMap);
+                Coin::saveCoins(argv[2], coinMap);
                 valid_loop = false;
             }
             else if (user_choice == "4") {
@@ -170,13 +130,13 @@ int main(int argc, char *argv[])
                 stockList.removeItem();
             }
             else if (user_choice == "6") {
-                displayCoins(coinMap);
+                Coin::displayCoins(coinMap);
             }
             else if (user_choice == "7") {
                 stockList.resetStock();
             }
             else if (user_choice == "8") {
-                stockList.resetCoins(coinMap);
+                Coin::resetCoins(coinMap);
             }
             else if (user_choice == "9") {
                 valid_loop = false;

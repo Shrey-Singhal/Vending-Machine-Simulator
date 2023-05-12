@@ -97,17 +97,14 @@ bool LinkedList::remove(const std::string& id) {
         delete current;
         this->count -= 1;
     }
-
     return found;
 }
 
 bool LinkedList::getById(const std::string& id, Node& fillNode) {
     Node* current = head;
-    Node* prev = nullptr;
     bool found = false;
     while (current != nullptr && !found) {
         if (current->data->id != id){
-            prev = current;
             current = current->next;
         }
         else {
@@ -115,7 +112,6 @@ bool LinkedList::getById(const std::string& id, Node& fillNode) {
             fillNode = *current;
         }
     }
-
     return found;
 }
 
@@ -128,5 +124,6 @@ void LinkedList::resetStock() {
     
         current = current->next;
     }
-    
+
+    delete(current);
 }

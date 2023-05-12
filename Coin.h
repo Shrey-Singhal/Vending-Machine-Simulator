@@ -2,7 +2,10 @@
 #define COIN_H
 
 // Coin.h defines the coin structure for managing currency in the system. 
-#define DELIM ","  // delimiter 
+#include <map>
+#include <string>
+
+#define DELIM ","  // delimiter
 
 // enumeration representing the various types of currency available in the system. 
 enum Denomination
@@ -24,6 +27,13 @@ public:
     unsigned count;
 
     static void printPrice(const unsigned int &costInCents);
+
+    static void displayCoins(const std::map<unsigned int, unsigned int> &coinMap);
+
+    static void saveCoins(const std::string& fileName,
+                         const std::map<unsigned int, unsigned int>& map);
+
+    static void resetCoins(std::map<unsigned int, unsigned int> &coinMap);
 };
 
 #endif // COIN_H

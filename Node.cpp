@@ -20,3 +20,4 @@ Stock::Stock(std::vector<std::string> dataVector) {
     onHand = (unsigned int) std::stoi(dataVector[4]);
 
 }
+

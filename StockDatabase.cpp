@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
-#include <unordered_map>
 #include <map>
 
 using std::string;
@@ -59,7 +58,7 @@ void StockDatabase::addItem() {
     content.push_back(itemPrice);
     content.push_back(std::to_string(DEFAULT_STOCK_LEVEL));
 
-    stockList->addBack(content);
+    addBack(content);
 }
 
 void StockDatabase::displayStock() {
@@ -72,17 +71,18 @@ void StockDatabase::displayStock() {
     cout << endl;
 
     for (int i = 0; i < stockList->size(); ++i) {
+        auto currStock = stockList->get(i);
         cout << std::setfill(' ');
         cout << left << std::setw(5)
-        << stockList->get(i)->data->id << "|";
+        << currStock->data->id << "|";
         cout << left << std::setw(39)
-        << stockList->get(i)->data->name << "|";
+        << currStock->data->name << "|";
         cout << left << std::setw(10)
-        << stockList->get(i)->data->onHand << " |";
+        << currStock->data->onHand << " |";
         cout << std::fixed << std::setprecision(3)
-        << "$ " << stockList->get(i)->data->price.dollars << ".";
+        << "$ " << currStock->data->price.dollars << ".";
         cout << std::setfill('0') << std::setw(2) <<
-        stockList->get(i)->data->price.cents << endl;
+        currStock->data->price.cents << endl;
     }
 
     cout << endl;
@@ -109,10 +109,7 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
 
         std::cout << "Please hand over the money - type in the value of each note/coin in cents.\n";
         std::cout << "Press enter or ctrl-d to cancel this purchase: " << std::endl;
-        bool success = coinLoop(map, userNode);
-        if (!success) {
-            std::cout << "Change is not available for that amount of money. Please try again.";
-        }
+        coinLoop(map, userNode);
     }
     else {
         std::cout << "Please select a valid ID.\n";
@@ -178,11 +175,7 @@ void StockDatabase::resetStock() {
     cout << endl;
 }
 
-void StockDatabase::resetCoins(std::map<unsigned, unsigned>& coinMap) {
-    for (auto denom: coinMap) {
-        coinMap[denom.first] = DEFAULT_COIN_COUNT;
-    }
-}
+
 
 bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) {
     unsigned costInCents = userNode.data->price.dollars * 100;
@@ -223,7 +216,7 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
                 }
             }
         }
-        else {
+        else if (endLoop){
             std::cout << "Error: ";
             Coin::printPrice(costInCents);
             std::cout << " is not a valid denomination of money. Please try again.\n";
@@ -231,7 +224,11 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
 
     }
 
-    return endLoop;
+    if (costInCents <= 0) {
+        std::cout << "Successful Purchase!" << std::endl;
+    }
+
+    return true;
 
 }
 
@@ -269,6 +266,7 @@ bool StockDatabase::dispenseCoins(std::map<unsigned, unsigned>& coins, unsigned 
     // If the amount is still not zero, it cannot be dispensed with the available coins
     if (amount != 0) {
         canBeDispensed = false;
+        std::cout << "Change is not available for that amount of money. Please try again.";
     }
     // Print and dispense change
     else {
@@ -288,28 +286,6 @@ bool StockDatabase::dispenseCoins(std::map<unsigned, unsigned>& coins, unsigned 
     }
 
     return canBeDispensed;
-}
-
-void StockDatabase::saveCoins(const std::string& fileName,
-                              const std::map<unsigned int, unsigned int>& map) {
-    // Open the file in write mode to clear all the content
-    std::ofstream outFile(fileName, std::ios::out | std::ios::trunc);
-    if (!outFile) {
-        std::cerr << "can't open output file" << endl;
-    }
-    outFile.close();
-
-    // Reopen the file in append mode to write new content
-    outFile.open(fileName, std::ios::out | std::ios::app);
-
-    // Write new content to the file
-    for (auto denom = map.rbegin(); denom != map.rend(); ++denom) {
-
-        outFile << denom->first << "," << denom->second << std::endl;
-    }
-
-    outFile.close();
-
 }
 
 void Coin::printPrice(const unsigned& costInCents) {
