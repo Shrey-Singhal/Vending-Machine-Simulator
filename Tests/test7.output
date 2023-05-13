@@ -10,19 +10,19 @@ Administrator-Only Menu:
   7.Reset Stock
   8.Reset Coins
   9.Abort Program
-Select your option (1-9):4
-The id of the new stock will be: I0006
-Enter the item name: Baklava
-Enter the item description: rich, pastry
-Enter the price for the item: 1
-Error: the price is not valid.
-Enter the price for the item: hi
-Error: the price is not valid.
-Enter the price for the item: 600  
-Error: the price is not valid.
-Enter the price for the item: 15.14
-Error: the cents need to be a multiple of 5.
-Enter the price for the item: 6.5
+Select your option (1-9):
+The id of the new stock will be: I0007
+Enter the item name: 
+Enter the item description: 
+Enter the price for the item: Error: the price is not valid.
+
+Enter the price for the item: Error: the price is not valid.
+
+Enter the price for the item: Error: the price is not valid.
+
+Enter the price for the item: Error: the cents need to be a multiple of 5.
+
+Enter the price for the item: 
 This item "Baklava - rich, pastry" has now been added to the menu.
 
 
@@ -37,18 +37,19 @@ Administrator-Only Menu:
   7.Reset Stock
   8.Reset Coins
   9.Abort Program
-Select your option (1-9):1
+Select your option (1-9):
 
 Items Menu
 ----------
 ID   |Name                                   | Available | Price
 -------------------------------------------------------------------
 I0002|Apple Pie                              |20         |$ 3.00
-I0006|Baklava                                |20         |$ 6.00
-I0003|Lemon Cheesecake                       |10         |$ 4.00
+I0006|Baklava                                |20         |$ 8.00
+I0007|Baklava                                |20         |$ 6.00
+I0003|Lemon Cheesecake                       |20         |$ 4.00
 I0004|Lemon Meringue Pie                     |20         |$ 3.00
-I0005|Lemon Tart                             |12         |$ 3.00
-I0001|Meat Pie                               |50         |$ 3.00
+I0005|Lemon Tart                             |20         |$ 3.00
+I0001|Meat Pie                               |20         |$ 3.00
 
 
 Main Menu:
@@ -62,4 +63,4 @@ Administrator-Only Menu:
   7.Reset Stock
   8.Reset Coins
   9.Abort Program
-Select your option (1-9):9
+Select your option (1-9):

@@ -7,7 +7,7 @@
 
 
 void Coin::displayCoins(const std::map<unsigned, unsigned>& coinMap) {
-    std::cout << "Coins Summary\n"
+    std::cout << "\nCoins Summary\n"
                  "-------------\n"
                  "Denomination    |    Count\n"
                  "---------------------------" << std::endl;

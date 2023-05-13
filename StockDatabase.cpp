@@ -36,13 +36,13 @@ void StockDatabase::addItem() {
     newItemId += std::to_string(stockList->size() + 1);
 
     // Read in new item info
-    cout << "The id of the new stock will be: " << newItemId << endl;
-    cout << "Enter the item name: ";
+    cout << "\nThe id of the new stock will be: " << newItemId;
+    cout << "\nEnter the item name: ";
     string itemName;
     getline(cin, itemName);
     trim(itemName);
     if (!itemName.empty() && !std::cin.eof()) {
-        cout << "Enter the item description: ";
+        cout << "\nEnter the item description: ";
         string itemDescription;
         getline(cin, itemDescription);
         trim(itemDescription);
@@ -51,7 +51,7 @@ void StockDatabase::addItem() {
             bool valid_loop = true;
             while (valid_loop) {
 
-                cout << "Enter the price for the item: ";
+                cout << "\nEnter the price for the item: ";
                 string itemPrice;
                 getline(cin, itemPrice);
                 trim(itemPrice);
@@ -61,7 +61,7 @@ void StockDatabase::addItem() {
                     std::string centPart = itemPrice.substr(dotIndex + 1);
                     int cents = std::stoi(centPart);
                     if (cents % 5 == 0){
-                        cout << "This item \"" << itemName << " - " << itemDescription
+                        cout << "\nThis item \"" << itemName << " - " << itemDescription
                              << "\" has now been added to the menu.\n" << endl;
 
                         vector<string> content;
@@ -90,7 +90,7 @@ void StockDatabase::addItem() {
 
 void StockDatabase::displayStock() {
     cout << endl;
-    cout << "Items Menu" << endl;
+    cout << "\nItems Menu" << endl;
     cout << "----------" << endl;
     cout << "ID   |Name                                   | Available | Price" << endl;
     cout << "-------------------------------------------------------------------" << endl;
@@ -128,7 +128,7 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
         Stock userNode;
         if (stockList->getById(userChoice, userNode)) {
             // Item found
-            std::cout << "You have selected \""
+            std::cout << "\nYou have selected \""
             << userNode.name << " - " << userNode.description
             << "\". This will cost you $ "
             << userNode.price.dollars << "."
@@ -137,7 +137,7 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
             << ".\n";
 
             std::cout << "Please hand over the money - type in the value of each note/coin in cents.\n";
-            std::cout << "Press enter or ctrl-d to cancel this purchase: " << std::endl;
+            std::cout << "Press enter or ctrl-d to cancel this purchase: ";
             coinLoop(map, userNode);
             valid_loop = false;
         }
@@ -146,7 +146,7 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
                 valid_loop = false;
             }
             else {
-                cout << "Error: you did not enter a valid id. Please try again.\n";
+                cout << "\nError: you did not enter a valid id. Please try again.\n";
             }
         }
     }
@@ -232,7 +232,7 @@ bool StockDatabase::coinLoop(std::map<unsigned int, unsigned int> &map,
     bool return_val = true;
 
     while (costInCents > 0 && !endLoop) {
-        std::cout << "You still need to give us ";
+        std::cout << "\nYou still need to give us ";
         Coin::printPrice(costInCents);
         std::cout << ": " << std::setfill(' ') ;
 
@@ -271,9 +271,9 @@ bool StockDatabase::coinLoop(std::map<unsigned int, unsigned int> &map,
             }
             
             else if (!endLoop){
-                std::cout << "Error: ";
+                std::cout << "\nError: ";
                 Coin::printPrice(costInCents);
-                std::cout << " is not a valid denomination of money. Please try again.\n";
+                std::cout << " is not a valid denomination of money. Please try again.";
             }
             
         }

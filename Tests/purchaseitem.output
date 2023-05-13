@@ -10,18 +10,17 @@ Administrator-Only Menu:
   7.Reset Stock
   8.Reset Coins
   9.Abort Program
-Select your option (1-9):1
+Select your option (1-9):
 
 Items Menu
 ----------
 ID   |Name                                   | Available | Price
 -------------------------------------------------------------------
 I0002|Apple Pie                              |20         |$ 3.00
-I0006|Baklava                                |20         |$ 8.00
-I0003|Lemon Cheesecake                       |10         |$ 4.00
+I0003|Lemon Cheesecake                       |20         |$ 4.00
 I0004|Lemon Meringue Pie                     |20         |$ 3.00
-I0005|Lemon Tart                             |12         |$ 3.00
-I0001|Meat Pie                               |50         |$ 3.00
+I0005|Lemon Tart                             |20         |$ 3.00
+I0001|Meat Pie                               |20         |$ 3.00
 
 
 Main Menu:
@@ -35,18 +34,16 @@ Administrator-Only Menu:
   7.Reset Stock
   8.Reset Coins
   9.Abort Program
-Select your option (1-9):2
-Purchase Item
+Select your option (1-9):Purchase Item
 -------------
-Please enter the id of the item you wish to purchase: I0005
+Please enter the id of the item you wish to purchase: 
 You have selected "Lemon Tart - A delicious lemon butter tart with a pastry base". This will cost you $ 3.00.
 Please hand over the money - type in the value of each note/coin in cents.
-Press enter or ctrl-d to cancel this purchase:
-You still need to give us $3.00: 100
-You still need to give us $2.00: 300
+Press enter or ctrl-d to cancel this purchase: 
+You still need to give us $3.00: 
+You still need to give us $2.00: 
 Error: $2.00 is not a valid denomination of money. Please try again.
-You still need to give us $2.00: 200
-Successful Purchase!
+You still need to give us $2.00: Successful Purchase!
 
 Main Menu:
   1.Display Items
@@ -59,4 +56,4 @@ Administrator-Only Menu:
   7.Reset Stock
   8.Reset Coins
   9.Abort Program
-Select your option (1-9):9
+Select your option (1-9):
