@@ -113,7 +113,6 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
         cout << "Please enter the id of the item you wish to purchase: ";
         std::string userChoice;
         std::getline(std::cin, userChoice);
-        std::getline(std::cin, userChoice);
 
         Node userNode;
         if (stockList->getById(userChoice, userNode)) {
@@ -146,19 +145,27 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
 bool StockDatabase::removeItem() {
     cout << "Enter the item id of the item to remove from the menu: ";
     string itemId;
-    getline(cin >> ws, itemId);
+    getline(cin, itemId);
+    bool result;
 
-    bool result = stockList->remove(itemId);
+    if (!itemId.empty() && !std::cin.eof()){
+        result = stockList->remove(itemId);
 
-    if (!result) {
-        cout << "Error: desired id was not found." << endl;
-        cout << "The task Remove Item failed to run successfully.";
+        if (!result) {
+            cout << "Error: desired id was not found." << endl;
+            cout << "The task Remove Item failed to run successfully.";
+        }
+        else {
+            cout << "Item " << itemId << " has been removed from the system.";
+        }
+
+        cout << endl;
     }
-    else {
-        cout << "Item " << itemId << " has been removed from the system.";
+    else{
+        result = false;
     }
 
-    cout << endl;
+
     return result;
 }
 

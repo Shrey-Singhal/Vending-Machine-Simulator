@@ -77,42 +77,42 @@ int main(int argc, char *argv[])
         auto coinMap = Coin::parseCoinFile(argv[2]);
 
         // Main Loop
-        std::string user_choice;
+        std::string userChoice;
         bool valid_loop = true;
 
         while (valid_loop && !std::cin.eof()) {
 
             displayMainMenu();
-            std::cin >> user_choice;
+            std::getline(std::cin, userChoice);
 
             // All options
-            if (user_choice == "1") {
+            if (userChoice == "1") {
                 stockList.displayStock();
             }
-            else if (user_choice == "2") {
+            else if (userChoice == "2") {
                 stockList.purchaseItem(coinMap);
             }
-            else if (user_choice == "3") {
+            else if (userChoice == "3") {
                 stockList.saveData(argv[1]);
                 Coin::saveCoins(argv[2], coinMap);
                 valid_loop = false;
             }
-            else if (user_choice == "4") {
+            else if (userChoice == "4") {
                 stockList.addItem();
             }
-            else if (user_choice == "5") {
+            else if (userChoice == "5") {
                 stockList.removeItem();
             }
-            else if (user_choice == "6") {
+            else if (userChoice == "6") {
                 Coin::displayCoins(coinMap);
             }
-            else if (user_choice == "7") {
+            else if (userChoice == "7") {
                 stockList.resetStock();
             }
-            else if (user_choice == "8") {
+            else if (userChoice == "8") {
                 Coin::resetCoins(coinMap);
             }
-            else if (user_choice == "9") {
+            else if (userChoice == "9") {
                 valid_loop = false;
             }
         }
