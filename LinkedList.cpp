@@ -95,6 +95,7 @@ bool LinkedList::remove(const std::string& id) {
         delete current;
         this->count -= 1;
     }
+
     return found;
 }
 
@@ -122,6 +123,4 @@ void LinkedList::resetStock() {
     
         current = current->next;
     }
-
-    delete(current);
 }

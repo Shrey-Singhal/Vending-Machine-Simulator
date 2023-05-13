@@ -12,7 +12,6 @@ Node::Node() {
 
 Node::~Node(){
     delete(data);
-    delete(next);
 }
 
 Stock::Stock(std::vector<std::string> dataVector) {
