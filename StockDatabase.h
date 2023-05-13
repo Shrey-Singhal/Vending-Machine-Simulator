@@ -31,8 +31,5 @@ private:
                   bool checkOnly);
 
     static bool coinLoop(std::map<unsigned int, unsigned int> &map, Stock &userNode);
-
-    bool
-    coinLoop(std::map<unsigned int, unsigned int> &map, const Stock &userNode);
 };
 #endif //APT_STOCKDATABASE_H

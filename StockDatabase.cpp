@@ -40,10 +40,12 @@ void StockDatabase::addItem() {
     cout << "Enter the item name: ";
     string itemName;
     getline(cin, itemName);
+    trim(itemName);
     if (!itemName.empty() && !std::cin.eof()) {
         cout << "Enter the item description: ";
         string itemDescription;
         getline(cin, itemDescription);
+        trim(itemDescription);
 
         if (!itemDescription.empty() && !std::cin.eof()) {
             bool valid_loop = true;
@@ -52,6 +54,7 @@ void StockDatabase::addItem() {
                 cout << "Enter the price for the item: ";
                 string itemPrice;
                 getline(cin, itemPrice);
+                trim(itemPrice);
                 long double ld;
                 if ((std::istringstream(itemPrice) >> ld >> std::ws).eof() && itemPrice.find('.') != std::string::npos){
                     size_t dotIndex = itemPrice.find('.');
@@ -120,7 +123,7 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
         cout << "Please enter the id of the item you wish to purchase: ";
         std::string userChoice;
         std::getline(std::cin, userChoice);
-        rtrim(userChoice);
+        trim(userChoice);
 
         Stock userNode;
         if (stockList->getById(userChoice, userNode)) {
@@ -154,6 +157,7 @@ bool StockDatabase::removeItem() {
     cout << "Enter the item id of the item to remove from the menu: ";
     string itemId;
     getline(cin, itemId);
+    trim(itemId);
     bool result;
 
     if (!itemId.empty() && !std::cin.eof()){
@@ -237,7 +241,7 @@ bool StockDatabase::coinLoop(std::map<unsigned int, unsigned int> &map,
             endLoop = true;
         }
         std::getline(std::cin, input);
-        rtrim(input);
+        trim(input);
 
         if (input.find_first_not_of( "0123456789" ) == std::string::npos && !endLoop && !input.empty()){
             unsigned userInput = std::stoul(input);
