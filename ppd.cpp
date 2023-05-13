@@ -5,7 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-
+#include "Helper.h"
 using std::cout;
 using std::endl;
 using std::cin;
@@ -31,24 +31,19 @@ bool validateFileExistence(const std::string& filename) {
     return file.good();
 }
 
-// trim from end
-static inline std::string &rtrim(std::string &s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(),
-                         std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
-    return s;
-}
-
 void parseStockFile(const std::string& filename, StockDatabase& db) {
     std::ifstream file(filename);
     std::string line;
 
     // Read lines from file and tokenize
     while (std::getline(file, line)) {
+        trim(line);
         std::vector<std::string> tokens;
         std::istringstream lineStream(line);
         std::string token;
 
         while (std::getline(lineStream, token, '|')) {
+            trim(token);
             tokens.push_back(token);
         }
 
@@ -92,8 +87,7 @@ int main(int argc, char *argv[])
 
             displayMainMenu();
             std::getline(std::cin, userChoice);
-            rtrim(userChoice);
-            std::cout << userChoice;
+            trim(userChoice);
 
             // All options
             if (userChoice == "1") {
