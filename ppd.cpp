@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 using std::cout;
 using std::endl;
@@ -28,6 +29,13 @@ void displayMainMenu() {
 bool validateFileExistence(const std::string& filename) {
     std::ifstream file(filename);
     return file.good();
+}
+
+// trim from end
+static inline std::string &rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+                         std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+    return s;
 }
 
 void parseStockFile(const std::string& filename, StockDatabase& db) {
@@ -84,6 +92,8 @@ int main(int argc, char *argv[])
 
             displayMainMenu();
             std::getline(std::cin, userChoice);
+            rtrim(userChoice);
+            std::cout << userChoice;
 
             // All options
             if (userChoice == "1") {

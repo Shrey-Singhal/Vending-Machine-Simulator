@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <algorithm>
+#include "Helper.h"
 
 using std::string;
 using std::vector;
@@ -118,6 +120,7 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
         cout << "Please enter the id of the item you wish to purchase: ";
         std::string userChoice;
         std::getline(std::cin, userChoice);
+        rtrim(userChoice);
 
         Stock userNode;
         if (stockList->getById(userChoice, userNode)) {
@@ -173,6 +176,8 @@ bool StockDatabase::removeItem() {
 
     return result;
 }
+
+
 
 void StockDatabase::saveData(const std::string& fileName) {
     // Open the file in write mode to clear all the content
@@ -232,6 +237,7 @@ bool StockDatabase::coinLoop(std::map<unsigned int, unsigned int> &map,
             endLoop = true;
         }
         std::getline(std::cin, input);
+        rtrim(input);
 
         if (input.find_first_not_of( "0123456789" ) == std::string::npos && !endLoop && !input.empty()){
             unsigned userInput = std::stoul(input);
