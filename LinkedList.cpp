@@ -99,7 +99,7 @@ bool LinkedList::remove(const std::string& id) {
     return found;
 }
 
-bool LinkedList::getById(const std::string& id, Node& fillNode) {
+bool LinkedList::getById(const std::string& id, Stock& fillNode) {
     Node* current = head;
     bool found = false;
     while (current != nullptr && !found) {
@@ -108,7 +108,7 @@ bool LinkedList::getById(const std::string& id, Node& fillNode) {
         }
         else {
             found = true;
-            fillNode = *current;
+            fillNode = *current->data;
         }
     }
     return found;

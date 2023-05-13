@@ -16,10 +16,13 @@ public:
     void sortByName();
     bool remove(const std::string &id);
     void resetStock();
-    bool getById(const std::string &id, Node &fillNode);
 
-// the beginning of the list
-Node* head;
+    // the beginning of the list
+    Node* head;
+
+    bool getById(const std::string &id, Stock &fillNode);
+
+
 private:
 
     // pointer to the last node in list

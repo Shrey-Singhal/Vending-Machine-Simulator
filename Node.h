@@ -42,6 +42,8 @@ public:
 class Stock
 {
 public:
+    Stock();
+
     std::string id;
 
     std::string name;

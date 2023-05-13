@@ -25,3 +25,5 @@ Stock::Stock(std::vector<std::string> dataVector) {
 
 }
 
+Stock::Stock() = default;
+
