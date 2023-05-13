@@ -110,7 +110,7 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
 
     bool valid_loop = true;
     while (valid_loop){
-        cout << "Please enter the id of the item you wish to purchase:";
+        cout << "Please enter the id of the item you wish to purchase: ";
         std::string userChoice;
         std::cin >> userChoice;
 
@@ -206,7 +206,7 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
     while (costInCents > 0 && !endLoop) {
         std::cout << "You still need to give us ";
         Coin::printPrice(costInCents);
-        std::cout << ": " << std::endl << std::setfill(' ') ;
+        std::cout << ": " << std::setfill(' ') ;
 
         string input;
         if (std::cin.eof()) {
@@ -222,6 +222,8 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
                 int valAfterCoin = (int) costInCents - userInput;
 
                 if (valAfterCoin < 0) {
+                    cout << "Here is your ";
+                    cout << userNode.data->name;
                     endLoop = !dispenseCoins(map, -valAfterCoin, false);
                 }
 
@@ -237,13 +239,14 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
                         costInCents = 0;
                     }
                 }
-            
-                else if (endLoop){
-                    std::cout << "Error: ";
-                    Coin::printPrice(costInCents);
-                    std::cout << " is not a valid denomination of money. Please try again.\n";
-                }
             }
+            
+            else if (!endLoop){
+                std::cout << "Error: ";
+                Coin::printPrice(costInCents);
+                std::cout << " is not a valid denomination of money. Please try again.\n";
+            }
+            
         }
         else {
             cout << "Error: you did not enter a valid int. Please try again." << endl;
@@ -261,9 +264,9 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
 }
 
 bool StockDatabase::dispenseCoins(std::map<unsigned, unsigned>& coins, unsigned amount, bool checkOnly) {
-    std::cout << "Your change of ";
+    std::cout << " and your change of ";
     Coin::printPrice(amount);
-    std::cout << ":" << std::endl;
+    std::cout << ":";
     bool canBeDispensed;
 
     std::map<unsigned, unsigned> changeCoins;
