@@ -112,7 +112,8 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
     while (valid_loop){
         cout << "Please enter the id of the item you wish to purchase: ";
         std::string userChoice;
-        std::cin >> userChoice;
+        std::getline(std::cin, userChoice);
+        std::getline(std::cin, userChoice);
 
         Node userNode;
         if (stockList->getById(userChoice, userNode)) {
@@ -131,7 +132,12 @@ void StockDatabase::purchaseItem(std::map<unsigned, unsigned>& map) {
             valid_loop = false;
         }
         else {
-            cout << "Error: you did not enter a valid id. Please try again.\n";
+            if (userChoice.empty() || std::cin.eof()) {
+                valid_loop = false;
+            }
+            else {
+                cout << "Error: you did not enter a valid id. Please try again.\n";
+            }
         }
     }
 
@@ -212,9 +218,10 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
         if (std::cin.eof()) {
             endLoop = true;
         }
-        std::cin >> input;
+        std::getline(std::cin, input);
+        std::getline(std::cin, input);
 
-        if (input.find_first_not_of( "0123456789" ) == std::string::npos){
+        if (input.find_first_not_of( "0123456789" ) == std::string::npos && !endLoop && !input.empty()){
             unsigned userInput = std::stoul(input);
         // Found denomination
             if (map.count((int) userInput) > 0) {
@@ -249,8 +256,13 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
             
         }
         else {
-            cout << "Error: you did not enter a valid int. Please try again." << endl;
-            return_val = false;
+            if (input.empty() || std::cin.eof()) {
+                endLoop = true;
+            }
+            else {
+                cout << "Error: you did not enter a valid int. Please try again." << endl;
+                return_val = false;
+            }
         }
 
     }
