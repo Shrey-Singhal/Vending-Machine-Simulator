@@ -11,7 +11,7 @@ using std::cin;
 
 
 void displayMainMenu() {
-    std::cout << "Main Menu:\n"
+    std::cout << "\nMain Menu:\n"
             "  1.Display Items\n"
             "  2.Purchase Items\n"
             "  3.Save and Exit\n"
