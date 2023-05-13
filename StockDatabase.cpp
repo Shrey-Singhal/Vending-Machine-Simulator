@@ -219,7 +219,6 @@ bool StockDatabase::coinLoop(std::map<unsigned, unsigned> &map, Node& userNode) 
             endLoop = true;
         }
         std::getline(std::cin, input);
-        std::getline(std::cin, input);
 
         if (input.find_first_not_of( "0123456789" ) == std::string::npos && !endLoop && !input.empty()){
             unsigned userInput = std::stoul(input);
